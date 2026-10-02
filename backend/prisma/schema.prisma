@@ -1,0 +1,141 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PerfilUsuario {
+  SOLICITANTE
+  ATENDENTE
+}
+
+enum StatusChamado {
+  ABERTO
+  EM_ANDAMENTO
+  RESOLVIDO
+  FECHADO
+  CANCELADO
+}
+
+// A ordem de declaração define a ordenação no Postgres (BAIXA < CRITICA).
+enum Prioridade {
+  BAIXA
+  MEDIA
+  ALTA
+  CRITICA
+}
+
+enum StatusTriagem {
+  PENDENTE
+  CONCLUIDA
+  FALHOU
+  ACEITA
+  REJEITADA
+}
+
+model Usuario {
+  id        Int           @id @default(autoincrement())
+  nome      String        @db.VarChar(120)
+  email     String        @unique @db.VarChar(160)
+  senhaHash String        @map("senha_hash")
+  perfil    PerfilUsuario
+  criadoEm  DateTime      @default(now()) @map("criado_em")
+
+  @@map("usuarios")
+}
+
+model Categoria {
+  id                 Int         @id @default(autoincrement())
+  nome               String      @unique @db.VarChar(60)
+  chamados           Chamado[]
+  triagensSugeridas  TriagemIA[]
+
+  @@map("categorias")
+}
+
+model Chamado {
+  id               Int           @id @default(autoincrement())
+  titulo           String        @db.VarChar(150)
+  descricao        String
+  solicitanteNome  String        @map("solicitante_nome") @db.VarChar(120)
+  solicitanteEmail String        @map("solicitante_email") @db.VarChar(160)
+  categoriaId      Int?          @map("categoria_id")
+  prioridade       Prioridade    @default(MEDIA)
+  status           StatusChamado @default(ABERTO)
+  criadoEm         DateTime      @default(now()) @map("criado_em")
+  atualizadoEm     DateTime      @updatedAt @map("atualizado_em")
+  resolvidoEm      DateTime?     @map("resolvido_em")
+
+  categoria   Categoria?        @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+  comentarios Comentario[]
+  historico   HistoricoStatus[]
+  triagens    TriagemIA[]
+
+  @@index([status, criadoEm(sort: Desc)])
+  @@index([prioridade, criadoEm(sort: Desc)])
+  @@index([categoriaId])
+  @@index([criadoEm(sort: Desc)])
+  @@index([titulo(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@index([descricao(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@map("chamados")
+}
+
+model Comentario {
+  id        Int      @id @default(autoincrement())
+  chamadoId Int      @map("chamado_id")
+  autor     String   @db.VarChar(120)
+  texto     String
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  chamado Chamado @relation(fields: [chamadoId], references: [id], onDelete: Cascade)
+
+  @@index([chamadoId, criadoEm])
+  @@map("comentarios")
+}
+
+model HistoricoStatus {
+  id             Int            @id @default(autoincrement())
+  chamadoId      Int            @map("chamado_id")
+  statusAnterior StatusChamado? @map("status_anterior")
+  statusNovo     StatusChamado  @map("status_novo")
+  alteradoEm     DateTime       @default(now()) @map("alterado_em")
+  alteradoPor    String         @map("alterado_por") @db.VarChar(120)
+
+  chamado Chamado @relation(fields: [chamadoId], references: [id], onDelete: Cascade)
+
+  @@index([chamadoId, alteradoEm])
+  @@map("historico_status")
+}
+
+model TriagemIA {
+  id                   Int           @id @default(autoincrement())
+  chamadoId            Int           @map("chamado_id")
+  categoriaSugeridaId  Int?          @map("categoria_sugerida_id")
+  prioridadeSugerida   Prioridade?   @map("prioridade_sugerida")
+  resumo               String?       @db.VarChar(200)
+  respostaSugerida     String?       @map("resposta_sugerida")
+  confianca            Float?
+  modelo               String        @db.VarChar(100)
+  promptVersao         String        @map("prompt_versao") @db.VarChar(30)
+  status               StatusTriagem @default(PENDENTE)
+  erro                 String?
+  tentativas           Int           @default(0)
+  latenciaMs           Int?          @map("latencia_ms")
+  tokensEntrada        Int?          @map("tokens_entrada")
+  tokensSaida          Int?          @map("tokens_saida")
+  decididoPor          String?       @map("decidido_por") @db.VarChar(120)
+  decididoEm           DateTime?     @map("decidido_em")
+  criadoEm             DateTime      @default(now()) @map("criado_em")
+  atualizadoEm         DateTime      @updatedAt @map("atualizado_em")
+
+  chamado           Chamado    @relation(fields: [chamadoId], references: [id], onDelete: Cascade)
+  categoriaSugerida Categoria? @relation(fields: [categoriaSugeridaId], references: [id], onDelete: SetNull)
+
+  @@index([chamadoId, criadoEm(sort: Desc)])
+  @@index([status])
+  @@map("triagens_ia")
+}
