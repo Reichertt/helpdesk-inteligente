@@ -4,10 +4,10 @@
 A vaga indica C# como diferencial; optei por Node/TypeScript para entregar o escopo completo no prazo, com uma estrutura simples (rotas, controllers, services, Prisma). Express 5 foi escolhido em vez de NestJS para gerenciar ações mais rapidas.
 
 ## Groq como IA
-Acredito que não seja a recomendada para utilizar em produção ou em grande escala, mas como é um projeto teste e sem custos, resolvi pela facilidade na integração utilizar o Groq versão openai/gpt-oss-20b como agente IA
+Acredito que não seja a recomendada para utilizar em produção ou em grande escala, mas como é um projeto teste e sem custos, resolvi pela facilidade na integração utilizar o Groq versão openai/gpt-oss-20b como agente IA (Na raiz do projeto, crie o arquivo `.env`, copie o conteúdo do `.env.example` e informe sua própria chave de API da Groq. Gerada em https://console.groq.com/keys)
 
 ## IA Fake
-Resolvi também realizar a criação de uma IA fake que realiza as sugestões caso a IA principal verdadeira caia, chamada de "fake:topmed-v1" em fakeProvedor.ts
+Resolvi também realizar a criação de uma IA fake que realiza as sugestões caso a IA principal verdadeira caia ou não exista o .env, chamada de "fake:topmed-v1" em fakeProvedor.ts
 
 ## IA prompt.ts
 Nesse arquivo você consegue observar o resumo que dei para a IA ser determinada como um atendente para realizar as sugestões que aparecem no frontend
@@ -28,6 +28,10 @@ Para a visualização dos dados, optei pela biblioteca **Recharts** devido à su
 
 ## Padrão de pastas Back e Front
 O padrão de estruturas que utilizei, foi o indicado em qualquer projeto para manter uma organização, utilizando o modelo back com Model, controller, rotas, services, uma pasta com IA. Já no front, utilizei o padrão também, podendo ser observado em projetos antigos do meu GITHUB, com pastas para componentes, hooks, pages etc.
+
+## Proteção de dados LGPD
+
+No arquivo mascaramento.ts é feito uma proteção de dados utilizando a função mascararDadosPessoais de maneira simples com REGEX para validar os dados recebidos.
 
 ## Uso de IA no Desenvolvimento
 
