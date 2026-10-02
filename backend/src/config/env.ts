@@ -12,7 +12,7 @@ const schema = z
     LOG_LEVEL: z.string().default('info'),
     AI_PROVIDER: z.enum(['fake', 'groq']).default('fake'),
     GROQ_API_KEY: z.string().optional(),
-    GROQ_MODEL: z.string().default('llama3-8b-8192'),
+    GROQ_MODEL: z.string().default('openai/gpt-oss-20b'),
     GROQ_BASE_URL: z.string().url().default('https://api.groq.com/openai/v1/chat/completions'),
     AI_TIMEOUT_MS: z.coerce.number().int().positive().default(15000),
     AI_MAX_RETRIES: z.coerce.number().int().min(0).max(5).default(2),

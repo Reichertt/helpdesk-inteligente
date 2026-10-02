@@ -21,7 +21,6 @@ enum StatusChamado {
   CANCELADO
 }
 
-// A ordem de declaração define a ordenação no Postgres (BAIXA < CRITICA).
 enum Prioridade {
   BAIXA
   MEDIA

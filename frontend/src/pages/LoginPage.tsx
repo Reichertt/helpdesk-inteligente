@@ -38,7 +38,7 @@ export function LoginPage() {
     <div className="login">
       <div className="login-lateral" aria-hidden="true">
         <div className="login-canhoto">
-          <span className="canhoto-numero">#0001</span>
+          <span className="canhoto-numero">TOPMED</span>
           <span className="canhoto-texto">Cada chamado chega triado. Quem decide é você.</span>
         </div>
       </div>
@@ -47,7 +47,7 @@ export function LoginPage() {
         <form className="login-form" onSubmit={enviar} noValidate>
           <div className="marca marca-escura">
             <span className="marca-icone" aria-hidden="true" />
-            <span>HelpDesk</span>
+            <span>HelpDesk TOPMED</span>
           </div>
           <h1>Entrar na central de chamados</h1>
 

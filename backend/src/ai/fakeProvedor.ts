@@ -32,7 +32,7 @@ export class FakeProvedor implements ProvedorIA {
     });
 
     if (descricao.includes('[simular-falha-ia]')) {
-      return { conteudo: 'isso não é JSON', modelo: 'fake:heuristica-v1' };
+      return { conteudo: 'isso não é JSON', modelo: 'fake:topmed-v1' };
     }
 
     const texto = `${titulo} ${descricao}`;
@@ -47,6 +47,6 @@ export class FakeProvedor implements ProvedorIA {
       confianca: sugerida ? 0.8 : 0.4,
     });
 
-    return { conteudo, modelo: 'fake:heuristica-v1', tokensEntrada: 0, tokensSaida: 0 };
+    return { conteudo, modelo: 'fake:topmed-v1', tokensEntrada: 0, tokensSaida: 0 };
   }
 }

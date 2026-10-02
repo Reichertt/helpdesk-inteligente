@@ -14,7 +14,7 @@ export function Sidebar({ aberta, onFechar }: { aberta: boolean; onFechar: () =>
     <aside className={`sidebar ${aberta ? 'aberta' : ''}`}>
       <div className="marca">
         <span className="marca-icone" aria-hidden="true" />
-        <span>HelpDesk</span>
+        <span>HelpDesk TOPMED</span>
       </div>
 
       <nav className="sidebar-nav" aria-label="Navegação principal">

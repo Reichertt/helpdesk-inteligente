@@ -7,7 +7,6 @@ interface RespostaGroq {
   usage?: { prompt_tokens: number; completion_tokens: number };
 }
 
-// A Groq expõe uma API compatível com a de chat completions da OpenAI.
 export class GroqProvedor implements ProvedorIA {
   readonly nome = 'groq';
 
@@ -23,10 +22,7 @@ export class GroqProvedor implements ProvedorIA {
       signal,
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.apiKey}` },
       body: JSON.stringify({
-        
-        // >>> ALTERE ESTA LINHA: Ignore o this.modelo e passe a string direto
         model: 'openai/gpt-oss-20b', 
-        
         temperature: 0.2,
         max_tokens: 600,
         response_format: { type: 'json_object' },

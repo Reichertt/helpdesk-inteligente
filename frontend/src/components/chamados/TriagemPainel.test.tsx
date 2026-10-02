@@ -12,7 +12,7 @@ const base: Triagem = {
   resumo: 'Cobrança duplicada no cartão.',
   respostaSugerida: 'Olá! Vamos verificar a cobrança.',
   confianca: 0.82,
-  modelo: 'groq:llama3-8b-8192',
+  modelo: 'groq:openai/gpt-oss-20b',
   promptVersao: 'triagem-v1',
   erro: null,
   decididoPor: null,

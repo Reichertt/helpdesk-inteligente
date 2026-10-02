@@ -29,7 +29,7 @@ services:
       LOG_LEVEL: ${LOG_LEVEL:-info}
       AI_PROVIDER: ${AI_PROVIDER:-fake}
       GROQ_API_KEY: ${GROQ_API_KEY:-}
-      GROQ_MODEL: ${GROQ_MODEL:-llama3-8b-8192}
+      GROQ_MODEL: ${GROQ_MODEL:-openai/gpt-oss-20b}
       AI_TIMEOUT_MS: ${AI_TIMEOUT_MS:-15000}
       AI_MAX_RETRIES: ${AI_MAX_RETRIES:-2}
     ports:
